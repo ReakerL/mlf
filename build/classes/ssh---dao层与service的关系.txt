@@ -1,0 +1,71 @@
+dao:首先在dao层定义需要操作的各种查询方法
+service：定义一个service接口，接口里再定义需要操作的各种查询方法，
+之后定义一个实现类，实现定义的接口，在实现类里编写实现接口的方法，方法里调用dao层定义的方法。
+
+
+单继承，多实现。只要一个类不是定义为final或是abstract（抽象类），就能继承。
+abstract修饰的类为抽象类，不能new一个对象。（有抽象方法的类一定是抽象类。但是抽象类中不一定都是抽象方法，也可以全是具体方法）
+子类继承父类，父类声明，子类实例化
+
+(applicationContext.xml配置)
+
+org.springframework.orm.hibernate3.LocalSessionFactoryBean的疑惑
+applicationContext中配置了sessionFactory   
+ <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <property name="dataSource" ref="dataSource"></property>
+  <property name="hibernateProperties">
+  <props>
+  <prop key="hibernate.dialect" >org.hibernate.dialect.SQLServerDialect</prop>
+  <prop key="hibernate.jdbc.batch_size">20</prop>
+  <prop key="hibernate.show_sql">true</prop>
+  </props>
+  </property>
+  <property name="mappingResources">
+  <list>
+  <value>com/jw/pojo/JwUser.hbm.xml</value>
+  </list>
+  </property>
+  </bean>
+
+我在junit4中定义了一个测试
+@Test
+  public void beanSessionFactoryTest(){
+  LocalSessionFactoryBean sessionFactory=(LocalSessionFactoryBean)appContext.getBean("sessionFactory");
+  }
+
+运行测试的时候报了一个异常
+Testcase: beanSessionFactoryTest(com.test.spring.SpringBeanTest): Caused an ERROR
+org.hibernate.impl.SessionFactoryImpl cannot be cast to org.springframework.orm.hibernate3.LocalSessionFactoryBean
+java.lang.ClassCastException: org.hibernate.impl.SessionFactoryImpl cannot be cast to org.springframework.orm.hibernate3.LocalSessionFactoryBean
+
+我看了LocalSessionFactoryBean的代码 以及父类 和 接口 都没用继承 SessionFactoryImpl  
+有知道的高手能解惑一下吗?
+
+------解决方案--------------------
+得到初步的答案了..具体还需要高人分析...
+
+方便后人~~
+
+LocalSessionFactoryBean实现了org.springframework.beans.factory.FactoryBean接口, spring在装配的时候, 如果发现实现了org.springframework.beans.factory.FactoryBean接口, 就会使用FactoryBean#getObject() 方法返回的对象装配,具体的可以看下文档.
+如果你想拿到LocalSessionFactoryBean实例, 在id前面加个'&'就可以了,在你的配置文件中BeanFactory.getBean('&sessionFactory')拿到的就是LocalSessionFactoryBean的实例. 
+------解决方案--------------------
+LocalSessionFactoryBean sessionFactory=(LocalSessionFactoryBean)appContext.getBean("sessionFactory")这段代码你换成：
+ClassPathXmlApplicationContext cpx=new ClassPathXmlApplicationContext（"applicationContext.xml"）;
+//先找资源文件，再找Bean
+LocalSessionFactoryBean sessionFactory=(LocalSessionFactoryBean)cpx.getBean("sessionFactory");
+
+在struts2使用ajax时，配置result时需要配置其type为json。当添加了json-lib-2.3-jdk15.jar和struts2-json-plugin-2.3.4.1.jar两个包时，仍然还会报错:There is no result type defined for type 'json' mapped with name 'success'.在网上查了很多资料，说少了其他什么包，但试了都没用，主要可能struts版本不同。这里其实是需要修改struts.xml中的<package中的 extends="struts-default"为 extends="json-default"即可解决此错误。
+
+<struts>
+
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <package name="json" extends="json-default">
+        <action name="jsonTest-*" method="{1}" class="org.net.action.JsonTest">
+            <result name="fail"></result>
+            <!-- 返回json类型数据 -->
+            <result name="json" type="json">
+                <param name="root">result<!-- result是action中设置的变量名，也是页面需要返回的数据，该变量必须有setter和getter方法 --></param>
+            </result>
+        </action>
+    </package>
+</struts>

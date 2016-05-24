@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+	function loadimage() {
+		document.getElementById("randImage").src = "randImage.jsp?"
+				+ Math.random();
+	}
+</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td height="40" width="80" align="center">验证码:</td>
+			<td><input id="rand" name="rand" size="10"> <img
+				alt="验证码" name="randImage" id="randImage" src="/rand/randImage.jsp"
+				width="60" height="20" border="1" align="absmiddle"> <a
+				href="javascript:loadimage();" style="text-decoration: none;">看不清</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

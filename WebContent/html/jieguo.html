@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>客户管理</title>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+	<style>
+	li {list-style-type:none;}
+	</style>
+<script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+<link rel="stylesheet" href="../css/petdog.css" type="text/css"></link></head>
+<body>
+	<div class="chongwu_zong">
+    	<div>
+    		<table class="chong_1">
+    			<thead class="chong_2">
+	    			<tr>
+	    				<th>编号</th>
+	    				<th>用户名</th>
+	    				<th>密码</th>
+	    				<th>日期</th>
+	    			</tr>
+    			</thead>
+    			<tbody id="con_show_box">
+    				<!-- 这里是加载的内容 -->
+	    		</tbody>
+    		</table>
+    	</div>
+    </div>
+
+<script type="text/javascript">
+            (function($){
+                    var conHtml = "";
+                    $.ajax({
+                    	type: "post",
+	              		cache:false,
+                        url:"toList.action",
+                        dataType:"json",
+                        success:function(data){
+                            /* $(oul).empty(); */
+                            $.each(data,function(i,item){
+                                conHtml +='<tr class="sb">'
+                                			+'<td >'+i+'</td>'
+	                                		+'<td >'+item.userName+'</td>'
+		                           			+'<td >'+item.passWord+'</td>'
+		                           			+'<td >'+item.logintime+'</td>'
+		                           			+'</tr>'
+                            });
+                            $("#con_show_box").append(conHtml);
+                        },
+                        error:function(){
+	              		window.location="../../login.jsp"
+	              }
+                    });
+            }(jQuery));
+            
+</script>
+</body>
+</html>
+
+
+  

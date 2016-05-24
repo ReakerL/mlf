@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>宠物狗</title>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="../../js/jquery-1.8.2.min.js"></script>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"></link>
+    
+	<style>
+li {list-style-type:none;}
+.mesWindow{position:absolute;margin:50px 50px auto; border:#666 1px solid;background:#fff;}
+.mesWindowTop{border-bottom:#eee 1px solid;margin-left:4px;padding:3px;font-weight:bold;text-align:left;font-size:12px;}
+.mesWindowContent{margin:4px;font-size:12px;}
+	</style>
+	
+	<script>
+var isIe=(document.all)?true:false;
+//设置select的可见状态
+function setSelectState(state)
+{
+var objl=document.getElementsByTagName('select');
+for(var i=0;i<objl.length;i++)
+{
+objl[i].style.visibility=state;
+}
+}
+function mousePosition(ev)
+{
+if(ev.pageX || ev.pageY)
+{
+return {x:ev.pageX, y:ev.pageY};
+}
+return {
+x:ev.clientX + document.body.scrollLeft - document.body.clientLeft,y:ev.clientY + document.body.scrollTop - document.body.clientTop
+};
+}
+//弹出方法
+function showMessageBox(wTitle,content,pos,wWidth)
+{
+closeWindow();
+var bWidth=parseInt(document.documentElement.scrollWidth);
+var bHeight=parseInt(document.documentElement.scrollHeight);
+if(isIe){
+setSelectState('hidden');}
+var back=document.createElement("div");
+back.id="back";
+var styleStr="top:0px;left:0px;position:absolute;background:#666;width:"+bWidth+"px;height:"+bHeight+"px;";
+styleStr+=(isIe)?"filter:alpha(opacity=0);":"opacity:0;";
+back.style.cssText=styleStr;
+document.body.appendChild(back);
+showBackground(back,50);
+var mesW=document.createElement("div");
+mesW.id="mesWindow";
+mesW.className="mesWindow";
+mesW.innerHTML="<div class='mesWindowTop'><table width='100%' height='100%'><tr><td>"+wTitle+"</td><td style='width:1px;'></td></tr></table></div><div class='mesWindowContent' id='mesWindowContent'>"+content+"</div><div class='mesWindowBottom'></div>";
+styleStr="left:25%;top:60px;position:absolute;width:"+wWidth+"px;";
+mesW.style.cssText=styleStr;
+document.body.appendChild(mesW);
+}
+//让背景渐渐变暗
+function showBackground(obj,endInt)
+{
+if(isIe)
+{
+obj.filters.alpha.opacity+=1;
+if(obj.filters.alpha.opacity<endInt)
+{
+setTimeout(function(){showBackground(obj,endInt)},5);
+}
+}else{
+var al=parseFloat(obj.style.opacity);al+=0.01;
+obj.style.opacity=al;
+if(al<(endInt/100))
+{setTimeout(function(){showBackground(obj,endInt)},5);}
+}
+}
+//关闭窗口
+function closeWindow()
+{
+if(document.getElementById('back')!=null)
+{
+document.getElementById('back').parentNode.removeChild(document.getElementById('back'));
+}
+if(document.getElementById('mesWindow')!=null)
+{
+document.getElementById('mesWindow').parentNode.removeChild(document.getElementById('mesWindow'));
+}
+if(isIe){
+setSelectState('');}
+}
+//测试弹出
+function testMessageBox(ev)
+{
+var objPos = mousePosition(ev);
+messContent='<form action="petdogadd.action" method="post"><table align="center" style="margin-top: 20px;"class="td_page2"><tr align="center"><td>宠物名称:<input type="text" name="petdog.dogName"></td></tr><tr align="center"><td>狗狗性别:<input type="radio" name="petdog.dogSex" value="公" checked>公<input type="radio" name="petdog.dogSex" value="母">母</td></tr><tr><td>出生日期:<input style="width: 169px;" id="meeting" name="petdog.dogBirthday" type="date"/></td></tr><tr align="center"><td>宠物价格:<input type="text" name="petdog.dogPrice"></td></tr><tr align="center"><td><input type="submit" value="确定"> <input type="button" onclick="closeWindow();" title="关闭窗口" class="close" value="取消" /></td></tr></table></form>';
+showMessageBox('新增宠物',messContent,objPos,450);
+}
+</script>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="25" align="center" valign="bottom" class="td06"><table width="98%" border="0" cellspacing="3" cellpadding="0">
+      <tr>
+        <td width="15"><img src="../../images/index_32.gif" width="9" height="9"></td>
+        <td valign="bottom" class="title">所有宠物狗</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+
+<table width="95%" align="center" style="margin-top: 20px;">
+  <tr>
+    <td class="td_page"><a href="#none" onclick="testMessageBox(event);">新增宠物</a></td>
+  </tr>
+</table>
+<br>
+    		<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" class="chong_1">
+    			<thead class="chong_2">
+	    			<tr>
+	    				<th class="td_top">编号</th>
+	    				<th class="td_top">宠物名称</th>
+	    				<th class="td_top">宠物性别</th>
+	    				<th class="td_top">出生日期</th>
+	    				<th class="td_top">价格(元)</th>
+	    				<th class="td_top" width="100">编辑</th>
+	    			</tr>
+    			</thead>
+    			<tbody id="con_show_box">
+    				<!-- 这里是加载的内容 -->
+	    		</tbody>
+    		</table>
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr> 
+    <td nowrap width="95%" class="td_top">显示所有宠物信息</td>
+  </tr>
+</table>
+<table width="95%"  border="0" cellpadding="0" cellspacing="0" class="table02" align="center">
+  <tr>
+    <td height="30" align="right"><img src="../../images/1.gif" width="4" height="5" align="absmiddle"> <span style="cursor:pointer;" class="first">首页</span> <img src="../../images/2.gif" width="3" height="5" align="absmiddle"> <span style="cursor:pointer;" class="prev">上一页</span> <img src="../../images/2-2.gif" width="3" height="5" align="absmiddle"> <span style="cursor:pointer;" class="next">下一页</span> <img src="../../images/3.gif" width="4" height="5" align="absmiddle"> <span style="cursor:pointer;" class="last">末页</span></td>
+  </tr>
+</table>
+<script type="text/javascript">
+(function($){
+	var num = 5;//每页显示的个数
+	var n = 0;
+	var m = -num;
+	function ajax(pageType){
+	var conHtml = "";
+	$.ajax({
+		type:"post",
+		cache:false,
+		url:"petdoglist.action",
+		dataType:"json",
+		success:function(data){
+		if(n < data.length && pageType=="next"){ //上一页
+			n += num;
+			m += num;
+		}else if(m > 0 && pageType=="prev"){ //下一页
+			n -= num;
+			m -= num;
+		}else if(pageType=="first"){ //第一页
+			n = num;
+			m = 0;
+		}else if(pageType=="last"){ //最后一页
+			n = data.length+(data.length%num)-0;
+			m = data.length+(data.length%num)-5;
+		}
+		$.each(data,function(i,item){
+		if(i>=m && i<n){
+		var url=encodeURI(encodeURI("petdogUpdate.html?dogId="+item.dogId+"&dogName="+item.dogName+"&dogSex="+item.dogSex+"&dogBirthday="+item.dogBirthday+"&dogPrice="+item.dogPrice+""));
+		/* ohtml += "<tr><td>" + item['i'] + "</td>";
+		ohtml += "<td>" + item['userName'] + "</td>"
+		ohtml += "<td>" + item['passWord'] + "</td></tr>"; */
+			conHtml +='<tr class="juzhong">'
+											+'<td class="td_01">'+(i+1)+'</td>'
+	                                		+'<td class="td_01">'+item.dogName+'</td>'
+		                           			+'<td class="td_01">'+item.dogSex+'</td>'
+		                           			+'<td class="td_01">'+item.dogBirthday+'</td>'
+		                           			+'<td class="td_01">'+item.dogPrice+'</td>'
+		                           			+'<td class="td_01" width="100"><a href="javascript:del(' + item.dogId + ')" >删除</a>'
+		                           			+'<a href='+url+' >|修改</a>'
+		                           			+'</td>'
+		                           			+'</tr>'
+		}
+			});
+		$("#con_show_box").html(conHtml);
+				},
+				error:function(){
+	            window.location="../../login.jsp"
+	           }
+			});
+		};
+		$(".next").click(function(){
+			ajax("next");
+		});
+		$(".prev").click(function(){
+			ajax("prev");
+		});
+		$(".first").click(function(){
+			ajax("first");
+		});
+		$(".last").click(function(){
+			ajax("last");
+		});
+		$(function(){ //初始化
+			ajax("next");
+		});
+	}(jQuery));
+//删除           
+function del(dogId) {
+        if (confirm("是否确定删除？")) {
+            //进行删除操作(通过ajax)
+            //使用jquery实现ajax
+            $.ajax({
+                url: "petdoglist.action",
+                data:"dogId="+dogId,
+                type: "post",
+                
+                success: function(data) {
+               // alert("删除失败！");
+                     if (data == "0"){
+	                     alert("删除失败！");
+					}                       
+                    else {
+                        window.location='../../html/petdog/petdog.html';
+                    } 
+                }
+            });
+        }
+    };            
+</script>
+</body>
+</html>
+
+
+  

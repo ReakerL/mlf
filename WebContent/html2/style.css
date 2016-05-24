@@ -1,0 +1,82 @@
+td {
+	text-align: left;
+	vertical-align: top;
+	font-family:Tahoma;
+	font-size:11px;
+	color:#999898;
+}
+form
+{
+	margin:0px;
+}
+a {
+	text-decoration: underline;
+	color:#02A1CC;
+}
+a.1 {
+	text-decoration: underline;
+	color:#767676;
+}
+
+.1
+{
+	color:#6F6F6F;
+}
+.db
+{
+	color:#0477BC;
+}
+a.db
+{
+	color:#3E8EBE;
+	text-decoration:none;
+}
+a.dbu
+{
+	color:#0477BC;
+	text-decoration:underline;
+}
+a.search
+{
+	color:#22AFF2;
+	text-decoration:none;
+}
+a.m
+{
+	color:#999898;
+	text-decoration:none;
+}
+.81
+{
+	color:#818181;
+}
+.white
+{
+	color:#FFFFFF;
+}
+a.white
+{
+	color:#FFFFFF;
+	text-decoration:none;
+}
+.green
+{
+	color:#86B445;
+}
+a.copy
+{
+	color:#9F9E9E;
+	text-decoration:none;
+}
+.65
+{
+	color:#656667;
+}
+.t10
+{
+	font-size:10px;
+}
+.76
+{
+	color:#767676;
+}

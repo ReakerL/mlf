@@ -1,0 +1,14 @@
+.toubu{margin:0 auto; width: 100%;height:25px; background-color: #719CC0;color: white;font-size: 18px;float: left;padding-left: 5px; }
+li{list-style-type:none}
+a{text-decoration:none;}
+BODY {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+    font-family:"Tahoma";
+    font-size:11px;
+}
+.sb{width: 100%;height: 20px;background-color: #9E9E9E;color: white;}
+.chong_1{width:100%; text-align: center;}
+.chong_2{width:100%;height:30px;font-size:16px; background-color: #03A9F4;}

@@ -1,0 +1,291 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%> 
+<%@ taglib prefix="s" uri="/struts-tags" %> 
+<% 
+String path = request.getContextPath(); 
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/"; 
+%> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+<head> 
+<base href="<%=basePath%>"> 
+<meta http-equiv="pragma" content="no-cache"> 
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0"> 
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3"> 
+<meta http-equiv="description" content="This is my page"> 
+<title>分页</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script type="text/javascript" src="../../Scripts/jquery-1.4.1.min.js"></script>
+<script language="javascript" type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
+<script language="javascript" type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"></script>
+<script language="javascript" type="text/javascript" src="../../Scripts/jquery.blockUI.js"></script>
+<script src="../../Scripts/jquery.blockUI.js" type="text/javascript"></script>
+<script>
+//说明：调用下面的js，需要放在其前台代码后面。
+function comparer($comparerID) {
+    var timeImg = "../../Content/Information/hot_files/time.gif";
+    var timeImg_click = "../../Content/Information/hot_files/time1.gif";
+    var clickImg = "../../Content/Information/hot_files/click.gif";
+    var clickImg_click = "../../Content/Information/hot_files/click1.gif";
+    var name1 = "";
+    $("#hiddenname").val("");      
+   
+    if ($comparerID == 0) {
+        $("#Comparerchose option[value='0']").attr("selected", true);
+        $("#timeImg").attr("src", timeImg_click);
+        $("#clickImg").attr("src", clickImg);
+       
+    }
+    if ($comparerID == 101) {
+        $("#Comparerchose option[value='0']").attr("selected", true);
+        $("#timeImg").attr("src", timeImg_click);
+        $("#clickImg").attr("src", clickImg);
+         name1 = $("#textkeyword").val();
+    }
+     if ($comparerID == 110) {
+         $("#textkeyword").val("");
+        $("#Comparerchose option[value='0']").attr("selected", true);
+        $("#timeImg").attr("src", timeImg);
+        $("#clickImg").attr("src", clickImg_click);           
+    }
+    else {
+       
+        $("#Comparerchose option[value='" + $comparerID + "']").attr("selected", true);
+        $("#timeImg").attr("src", timeImg_click);
+        $("#clickImg").attr("src", clickImg);      
+    }
+    $("#hiddenname").val(name1);
+    var name = $("#hiddenname").val();  
+    var Value = $comparerID;
+    $("#hiddenID").val(Value);
+    var pageIndex = 1;
+    GetSearch(Value,pageIndex,name);
+}
+function GetSearch(Value,pageIndex,name){
+    var s = pageIndex + "|" + Value + "|"+name+"|" + new Date().toLocaleTimeString();
+    $.ajax({              //调用jquery的ajax方法
+        type: "post",   //设置ajax方法提交数据的形式
+        url: "/Information/getResult",   //把数据提交到address
+        dataType: "json",
+        data: "varID=" + s,
+        // + $(':input').eq(0).val()
+        timeout: 5000,
+        beforeSend: function () {
+            $("#show1").html("<div  class='loading'><img src='../../Content/img/loading3.gif' style=' margin:50px 60px 50px 60px;' /></div>");
+        },
+        error: function () {
+            $("#show1").html("<p class='windown-error'>系统出错，请联系管理员...</p>");
+        },
+        success: function (result1) {
+            $("#show1").html("");
+            var i = "";
+            li = "<table id="dds" width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#a8c7ce"  onmouseover="changeto()" onmouseout="changeback()">";
+            $("#show1").append(li);
+            li = "<tr id="trline">";
+            $("#dds").append(li);
+            li = "<td width="10%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> ID  </div> </td>";
+            $("#trline").append(li);
+            li = " <td width="14%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> 类型  </div> </td>";
+            $("#trline").append(li);
+            li = " <td width="25%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> 标题  </div> </td>";
+            $("#trline").append(li);
+            li = " <td width="11%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> 创建时间  </div> </td>";
+            $("#trline").append(li);
+            li = " <td width="5%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> 点击率 </div> </td>";
+            $("#trline").append(li);
+            li = " <td width="14%" height="20" bgcolor="d3eaef" class="STYLE10"><div align="center"> 基本操作 </div> </td>";
+            $("#trline").append(li);
+            li = "</tr>";
+            $("#dds").append(li);
+            for (var i = 1; i <= result1.length; i++) {
+                var comments = result1[i - 1];
+                var date = ConvertJSONDateToJSDateObject(comments.createTime);
+                li = "<tr id="trcon_" + i + "">";
+                $("#dds").append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE19"><div align="center">" + comments.ID + "</td>  ";
+                $("#trcon_" + i).append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE19"><div align="center">" + comments.TypeName + "</td>  ";
+                $("#trcon_" + i).append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE19"><div align="center">" + comments.title + "</td>  ";
+                $("#trcon_" + i).append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE19"><div align="center">" + date + "</td>  ";
+                $("#trcon_" + i).append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE19"><div align="center">" + comments.click + "</td>  ";
+                $("#trcon_" + i).append(li);
+                li = "<td height="20" bgcolor="#FFFFFF" class="STYLE12"><div align="center"><a href="/Information/Delete/" + comments.ID + "">删除</a>|<a href="/Information/InformationEdit/" + comments.ID + " ">修改</a>"
+                $("#trcon_" + i).append(li);
+                li = "</tr>";
+                $("#dds").append(li);
+            }          
+            li = "</tr>";
+            $("#dds").append(li);
+            li = "</table>";
+            $("#show1").append(li);
+        }
+    });
+    var ss = Value + "|" + new Date().toLocaleTimeString();
+    GetPage(pageIndex,ss); 
+}
+function GetPage(pageIndex,ss) {
+    $.ajax({
+        type: "post",
+        url: "/Information/getCount",
+        dataType: "json",
+        data: "UserID=" + ss,
+        // + $(':input').eq(0).val()
+        timeout: 5000,
+        beforeSend: function () {
+           
+        },
+        error: function () {
+            alert("系统错误");
+        },
+        success: function (result1) {
+            alldata_count = result1.count;           
+            createPage(pageIndex, alldata_count);
+           
+        }
+    });
+}
+var onepage_count = 20;
+var pageSize = 5;               //分页导航每页
+var currentPageIndex = 1;       //分页导航当前页索引
+function createPage(currentPageIndex, alldata_count) {
+   
+    var totalPageCount = Math.ceil(alldata_count / onepage_count);   
+    if (totalPageCount == 1 || totalPageCount < 1 || pageSize < 1) {       
+        $(".pager").html("");
+        return;
+    }
+    $(".pager").html("");
+    if (Number(currentPageIndex) != 1) {
+       
+        var pev_page = Number(currentPageIndex) - 1;
+        var str = "<a href='#show1'id=1>首页</a>";
+        var str1 = "<a href='#show1'id=" + pev_page + ">上一页</a>";
+        $(".pager").append(str);
+        $(".pager").append(str1);
+    }
+    var start = currentPageIndex - (Math.ceil(pageSize / 2) - 1);
+    //限制开始页数，每页数小于总页数时
+ 
+    if (pageSize < totalPageCount) {
+        if (start < 1) {
+            start = 1;
+        }
+        else if (start + pageSize > totalPageCount) {
+            start = totalPageCount - pageSize + 1;
+        }
+    }
+    else {
+        start = 1;
+    }
+    var end = start + pageSize - 1;
+    //限制结束页数，当结束页数大于总页数时
+    if (end > totalPageCount) {
+        end = totalPageCount;
+    }
+    var newNumberStr;
+    for (var i = start; i <= end; i++) {       
+        newNumberStr = "";
+        if (i == currentPageIndex) {
+            newNumberStr = "<SPAN class=cur>" + i + " </SPAN>";
+        }
+        else {
+            newNumberStr = "<a href='#show1' id=" + i + ">" + i + "</a>";
+        }
+        $(".pager").append(newNumberStr);      
+    }
+    if (Number(currentPageIndex) < totalPageCount) {
+        var next_page = Number(currentPageIndex) + 1;
+        var end2 = Number(totalPageCount);
+        var end3 = Number(totalPageCount) - 1;
+        var str = "<a href='#show1' id=" + next_page + ">下一页</a>";
+        var str1 = "<a href='#show1' id=" + totalPageCount + ">未页</a>";
+        var str2 = "<a href='#show1' id=" + end2 + ">" + end2 + "</a>";
+        var str3 = "<a href='#show1' id=" + end3 + ">" + end3 + "</a>";
+        if ((Number(currentPageIndex) + 1) == end2 || (Number(currentPageIndex) + 2) == end3 || (Number(currentPageIndex) + 2) == end2) { }
+        else {
+            $(".pager").append("<span>...</span>");
+            $(".pager").append(str3);
+            $(".pager").append(str2);
+        }
+        $(".pager").append(str);
+        $(".pager").append(str1);
+    }
+    //给所有项绑定事件
+    $(".pager a").bind("click", selectPage);
+}
+function selectPage(event)//分页事件
+{
+    var Value = $("#hiddenID").val();
+    var name = $("#hiddenname").val();
+    currentPageIndex = $(event.target).attr("id");
+    GetSearch(Value,currentPageIndex,name);
+}
+ 
+
+.NET MVC服务器端
+private static int pageindex;
+ [HttpPost]
+        public ActionResult getResult(string varID)
+        {
+            string[] array = varID.Split('|');
+            int? id = int.Parse(array[0]);
+            pageindex = id ?? 0;
+            try
+            {
+                if (array[1] == "0")
+                {
+                    PagedList<InFormationObject> model = InFormationDAO.GetListAll(pageindex);             
+                    return this.Json(model);
+                }
+                if (array[1] == "110")
+                {
+                    PagedList<InFormationObject> model = new InFormationDAO().Getclick(pageindex);                  
+                    return this.Json(model);
+                }
+                if (array[1] == "101")
+                {
+                    PagedList<InFormationObject> model = new InFormationDAO().GetName(pageindex, array[2]);
+                    return this.Json(model);
+                }
+                else {
+                    PagedList<InFormationObject> model =new InFormationDAO().GetAll(pageindex, int.Parse(array[1]));                   
+                    return this.Json(model);
+                }
+            }
+            catch (Exception)
+            {
+                return this.Json(new { result = "false" });
+            }
+        }
+        [HttpPost]
+        public ActionResult getCount(string UserID)
+        {
+            string[] array = UserID.Split('|');
+            try
+            {
+               
+                    int count = new InFormationDAO().getCount(int.Parse(array[0]));
+                    return this.Json(new { result = "true", count = count });
+               
+            }
+            catch (Exception)
+            {
+                return this.Json(new { result = "false", count = "0" });
+            }
+        }
+
+</script> 
+</head> 
+
+ 
+<body> 
+<div > 
+<table id="content">/*显示数据内容*/ 
+</table> 
+<div id="pager" class="yahoo2"></div>/*显示分页条*/ 
+</div> 
+</body> 
+</html> 

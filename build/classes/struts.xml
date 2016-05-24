@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+ 	<!-- 开启使用开发模式，详细错误提示 -->
+    <constant name="struts.devMode" value="false" />
+    <!-- 将对象交给spring管理 -->
+    <constant name="struts.objectFactory" value="spring" />
+    <!-- 指定资源编码类型 -->
+    <constant name="struts.i18n.encoding" value="UTF-8" /> 
+	<!-- 指定每次请求到达，重新加载资源文件 -->
+    <constant name="struts.i18n.reload" value="false" />
+    <!-- 指定每次配置文件更改后，自动重新加载 -->
+    <constant name="struts.configuration.xml.reload" value="false" />
+    <!-- 默认后缀名 -->
+    <constant name="struts.action.extension" value="do,action" />
+	<!-- Struts Annotation -->
+    
+    
+	<package name="default" extends="struts-default">
+	<!-- 登录 -->
+		<action name="loginAction" class="loginAction" method="login">
+			<result name="SUCCESS">/index.jsp</result>
+			<result name="ERROE">/login.jsp</result>
+		</action>
+		<action name="shifou" class="loginAction" method="shifou"></action>
+		<!-- 用户 -->
+		<action name="usertoList" class="userAction" method="toList" />
+		
+		<action name="useradd" class="userAction" method="add">
+			<result name="SUCCESS">/html/user/userselect.html</result>
+		</action>
+		<action name="userupdate" class="userAction" method="userupdate">
+			<result name="SUCCESS">/html/user/userUpOk.html</result>
+		</action>
+		<action name="userdelete" class="userAction" method="delete">
+			 <result name="SUCCESS">/html/user/userselect.html</result>
+		</action>
+		
+		<!-- 宠物狗 -->
+		<action name="petdoglist" class="petdogAction" method="doglist"/>
+		<action name="finlist" class="petdogAction" method="tolist">
+			 <result name="SUCCESS">/lang.jsp</result>
+		</action>
+		<action name="petdogadd" class="petdogAction" method="petdogadd">
+			 <result name="SUCCESS">/html/petdog/petdog.html</result>
+		</action>
+		<action name="petdogdelete" class="petdogAction" method="petdogdelete">
+			 <result name="SUCCESS">/html/petdog/petdog.html</result>
+		</action>
+		<!-- 获取session中的用户名 -->
+		<action name="getUserInfo" class="userAction" method="getUserInfo"/>
+		<!-- 注销 -->
+		<action name="exitlogin" class="userAction" method="exitlogin">
+			<result name="SUCCESS">/login.jsp</result>
+		</action>
+		
+		<!-- 网站前台显示 -->
+		<action name="showadd" class="customerAction" method="useradd">
+			<result name="SUCCESS">/index.jsp</result>	
+		</action> 
+	</package>
+	
+</struts>    
